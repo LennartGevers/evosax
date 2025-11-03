@@ -14,7 +14,9 @@ from evosax.core.fitness_shaping import identity_fitness_shaping_fn
 from evosax.types import Fitness, Population, PyTree, Solution
 
 from ...learned_evolution.evotf_tools.evo_transformer import EvoTransformer
-from ...learned_evolution.evotf_tools.features.distribution import DistributionFeaturizer
+from ...learned_evolution.evotf_tools.features.distribution import (
+    DistributionFeaturizer,
+)
 from ...learned_evolution.evotf_tools.features.fitness import FitnessFeaturizer
 from ...learned_evolution.evotf_tools.features.solution import SolutionFeaturizer
 from ...learned_evolution.les_tools import load_pkl_object

@@ -44,6 +44,6 @@ def __dir__():
 
 if TYPE_CHECKING:  # pragma: no cover
     from .evo_transformer import EvoTransformer
-    from .features.distribution import DistributionFeaturizer, DistributionFeaturesState
-    from .features.fitness import FitnessFeaturizer, FitnessFeaturesState
-    from .features.solution import SolutionFeaturizer, SolutionFeaturesState
+    from .features.distribution import DistributionFeaturesState, DistributionFeaturizer
+    from .features.fitness import FitnessFeaturesState, FitnessFeaturizer
+    from .features.solution import SolutionFeaturesState, SolutionFeaturizer

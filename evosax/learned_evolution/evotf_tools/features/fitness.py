@@ -83,15 +83,11 @@ class FitnessFeaturizer:
             fit_out = jnp.concatenate([fit_out, fit_norm], axis=1)
 
         if self.snes_weights:
-            fit_snes = _xnes_weights(fitness.shape[0])[fitness.argsort()].reshape(
-                -1, 1
-            )
+            fit_snes = _xnes_weights(fitness.shape[0])[fitness.argsort()].reshape(-1, 1)
             fit_out = jnp.concatenate([fit_out, fit_snes], axis=1)
 
         if self.des_weights:
-            fit_des = _des_weights(fitness.shape[0])[fitness.argsort()].reshape(
-                -1, 1
-            )
+            fit_des = _des_weights(fitness.shape[0])[fitness.argsort()].reshape(-1, 1)
             fit_out = jnp.concatenate([fit_out, fit_des], axis=1)
 
         if self.w_decay:
