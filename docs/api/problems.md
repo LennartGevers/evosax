@@ -19,25 +19,3 @@ The `evosax.problems` package provides benchmark objective functions and wrapper
 ::: evosax.problems.MetaBBOBProblem
 
 ::: evosax.problems.bbob_fns
-
-## Reinforcement learning suites
-
-::: evosax.problems.GymnaxProblem
-
-::: evosax.problems.BraxProblem
-
-## Vision tasks
-
-::: evosax.problems.TorchVisionProblem
-
-## Network helpers
-
-::: evosax.problems.MLP
-
-::: evosax.problems.CNN
-
-::: evosax.problems.identity_output_fn
-
-::: evosax.problems.categorical_output_fn
-
-::: evosax.problems.tanh_output_fn
