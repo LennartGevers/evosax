@@ -1,2 +1,0 @@
-
-Aborted with 30 warnings in strict mode!
