@@ -4,6 +4,7 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![codecov](https://codecov.io/gh/RobertTLange/evosax/branch/main/graph/badge.svg?token=5FUSX35KWO)](https://codecov.io/gh/RobertTLange/evosax)
 [![Paper](http://img.shields.io/badge/paper-arxiv.2212.04180-B31B1B.svg)](http://arxiv.org/abs/2212.04180)
+![Funding provided by DFG Project ID 390523135 - EXC 2002/1](https://img.shields.io/badge/DFG%20funded-Project%20ID%390523135%20--%20EXC%2002%20-blue)
 <a href="https://github.com/RobertTLange/evosax/blob/main/docs/logo.png?raw=true"><img src="https://github.com/RobertTLange/evosax/blob/main/docs/logo.png?raw=true" width="170" align="right" /></a>
 
 Tired of having to handle asynchronous processes for neuroevolution? Do you want to leverage massive vectorization and high-throughput accelerators for Evolution Strategies? `evosax` provides a comprehensive, high-performance library that implements Evolution Strategies (ES) in JAX. By leveraging XLA compilation and JAX's transformation primitives, `evosax` enables researchers and practitioners to efficiently scale evolutionary algorithms to modern hardware accelerators without the traditional overhead of distributed implementations.

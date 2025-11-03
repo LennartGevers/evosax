@@ -4,7 +4,8 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![codecov](https://codecov.io/gh/RobertTLange/evosax/branch/main/graph/badge.svg?token=5FUSX35KWO)](https://codecov.io/gh/RobertTLange/evosax)
 [![Paper](http://img.shields.io/badge/paper-arxiv.2212.04180-B31B1B.svg)](http://arxiv.org/abs/2212.04180)
-<a href="logo.png"><img src="logo.png" width="170" align="right" /></a>
+![Funding provided by DFG Project ID 390523135 - EXC 2002/1](https://img.shields.io/badge/DFG%20funded-Project%20ID%390523135%20--%20EXC%2002%20-blue)
+<a href="assets/logo.png"><img src="assets/logo.png" width="170" align="right" /></a>
 
 `evosax` is a comprehensive, high-performance library of evolution strategies (ES) implemented in JAX. It embraces XLA compilation and JAX transformations to make the classical ask–eval–tell workflow trivial to jit-compile, vectorize, and parallelize across CPUs, GPUs, and TPUs. With 30+ algorithms ranging from CMA-ES and OpenAI-ES to diffusion- and learning-based variants, `evosax` scales neuro-evolution without the usual orchestration overhead.
 

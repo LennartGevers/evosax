@@ -22,7 +22,8 @@ theme:
              name: Switch to light mode
     icon:
         repo: fontawesome/brands/github  # GitHub logo in top right
-        logo: "material/math-integral-box"  # Diffrax logo in top left
+    logo: assets/logo.png
+    favicon: assets/logo.png
 
 site_name: evosax
 site_description: The documentation for the evosax software library.
