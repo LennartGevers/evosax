@@ -85,6 +85,16 @@ nav:
     - Getting Started: getting-started.md
     - Guides:
         - Ask-Eval-Tell Workflow: guides/ask-eval-tell.md
+    - Examples:
+        - Getting Started: 'examples/00_getting_started.ipynb'
+        - Blackbox Optimization Benchmarking Problem: 'examples/01_bbob.ipynb'
+        - Reinforcement Learning - Evolving MLP: 'examples/02_rl.ipynb'
+        - Vision - Evolving CNN: 'examples/03_vision.ipynb'
+        - Restart Evolution Strategy: 'examples/04_restart_es.ipynb'
+        - Diffusion Evolution: 'examples/05_diffusion_evolution.ipynb'
+        - Stein Variational Evolution Strategy: 'examples/06_sv_es.ipynb'
+        - Persistent ES on Learning Rate Tuning Problem: 'examples/07_persistent_es.ipynb'
+        - Evolution Strategy with Parallelization: 'examples/08_parallelization.ipynb'
     - Algorithms:
         - Distribution-based Strategies: algorithms/distribution.md
         - Population-based Strategies: algorithms/population.md
