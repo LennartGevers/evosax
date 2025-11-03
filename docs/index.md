@@ -19,7 +19,7 @@
 - **Unified API** – Both distribution-based and population-based strategies expose the same JAX-compatible interface.
 - **Accelerator friendly** – Designed for `jax.jit`, `jax.vmap`, `jax.lax.scan`, and batched evaluation on modern hardware.
 - **Battle tested** – Includes restart schedules, fitness shaping, learned evolution components, and metrics used in research projects.
-- **Extensible** – Build custom strategies by subclassing [`EvolutionaryAlgorithm`](api/algorithms.md#evosax.algorithms.EvolutionaryAlgorithm) and reusing the provided utilities.
+- **Extensible** – Build custom strategies by subclassing [`EvolutionaryAlgorithm`](api/algorithms.md#evosax.algorithms.base.EvolutionaryAlgorithm) and reusing the provided utilities.
 
 ## Quick start 🍲
 

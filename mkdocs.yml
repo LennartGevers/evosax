@@ -46,6 +46,9 @@ markdown_extensions:
         permalink: "¤"  # Adds a clickable permalink to each section heading
         toc_depth: 4  # Prevents h5, h6 (i.e. methods) from showing up in the TOC.
 
+extra_css:
+    - assets/custom.css
+
 plugins:
     - search:
         separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
@@ -60,6 +63,18 @@ plugins:
             - flax.linen.module.Module
             - flax.core.scope.Scope
             - flax.linen.module._Sentinel
+            - evosax.algorithms.base.State
+            - evosax.algorithms.base.Params
+            - evosax.algorithms.distribution_based.base.State
+            - evosax.algorithms.distribution_based.base.Params
+            - evosax.algorithms.population_based.base.State
+            - evosax.algorithms.population_based.base.Params
+            - evosax.problems.bbob.bbob.State
+            - evosax.problems.bbob.meta_bbob.State
+            - evosax.problems.bbob.meta_bbob.Params
+            - evosax.problems.rl.gymnax.State
+            - evosax.problems.rl.brax.State
+            - evosax.problems.vision.torchvision.State
             - lineax.AbstractLinearSolver
             - lineax.AutoLinearSolver
             - optimistix.AbstractRootFinder
@@ -72,6 +87,10 @@ plugins:
                     heading_level: 4
                     inherited_members: true
                     members_order: source
+                    filters:
+                        - "!^_[^_]"
+                        - "!^__[^_]+__$"
+                        - "^__init__$"
                     show_bases: false
                     show_if_no_docstring: true
                     show_overloads: false

@@ -4,16 +4,16 @@ Population-based algorithms explicitly evolve a set of candidate solutions using
 
 ## Genetic algorithms
 
-- [`SimpleGA`](../api/algorithms.md#evosax.algorithms.SimpleGA) – a classic $(μ + λ)$ genetic algorithm with tournament selection and mutation.
-- [`MR15_GA`](../api/algorithms.md#evosax.algorithms.MR15_GA) – a multi-recombinative variant with adaptive mutation rates.
-- [`SAMR_GA`](../api/algorithms.md#evosax.algorithms.SAMR_GA) and [`GESMR_GA`](../api/algorithms.md#evosax.algorithms.GESMR_GA) – self-adaptive mutation rate algorithms for robust exploration.
-- [`LearnedGA`](../api/algorithms.md#evosax.algorithms.LearnedGA) – augments classic GA operators with learned mutation policies.
+- [`SimpleGA`](../api/algorithms.md#evosax.algorithms.population_based.simple_ga.SimpleGA) – a classic $(μ + λ)$ genetic algorithm with tournament selection and mutation.
+- [`MR15_GA`](../api/algorithms.md#evosax.algorithms.population_based.mr15_ga.MR15_GA) – a multi-recombinative variant with adaptive mutation rates.
+- [`SAMR_GA`](../api/algorithms.md#evosax.algorithms.population_based.samr_ga.SAMR_GA) and [`GESMR_GA`](../api/algorithms.md#evosax.algorithms.population_based.gesmr_ga.GESMR_GA) – self-adaptive mutation rate algorithms for robust exploration.
+- [`LearnedGA`](../api/algorithms.md#evosax.algorithms.population_based.learned_ga.LearnedGA) – augments classic GA operators with learned mutation policies.
 
 ## Swarm and diffusion methods
 
-- [`PSO`](../api/algorithms.md#evosax.algorithms.PSO) – particle swarm optimization with inertia and social components.
-- [`DiffusionEvolution`](../api/algorithms.md#evosax.algorithms.DiffusionEvolution) – diffusion-based search that transitions populations using learned score networks.
-- [`DifferentialEvolution`](../api/algorithms.md#evosax.algorithms.DifferentialEvolution) – classic DE/rand/1 strategy with configurable crossover and scaling factors.
+- [`PSO`](../api/algorithms.md#evosax.algorithms.population_based.pso.PSO) – particle swarm optimization with inertia and social components.
+- [`DiffusionEvolution`](../api/algorithms.md#evosax.algorithms.population_based.diffusion_evolution.DiffusionEvolution) – diffusion-based search that transitions populations using learned score networks.
+- [`DifferentialEvolution`](../api/algorithms.md#evosax.algorithms.population_based.differential_evolution.DifferentialEvolution) – classic DE/rand/1 strategy with configurable crossover and scaling factors.
 
 ## Hybrid search
 

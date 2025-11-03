@@ -11,7 +11,7 @@ Each strategy exposes three core attributes:
 - **`ask(key, state, params)`** – samples candidate solutions and returns `(population, new_state)`.
 - **`tell(population, fitness, state, params)`** – updates the state using evaluated fitness values.
 
-The [`CMA_ES` implementation](../api/algorithms.md#evosax.algorithms.CMA_ES) demonstrates this interface:
+The [`CMA_ES` implementation](../api/algorithms.md#evosax.algorithms.distribution_based.cma_es.CMA_ES) demonstrates this interface:
 
 ```python
 from evosax.algorithms import CMA_ES
@@ -64,4 +64,4 @@ The returned state typically includes:
 
 You can log these fields directly or transform them with `jax.device_get` when interacting with host-side logging frameworks.
 
-For advanced instrumentation, inspect the dataclasses defined in [`evosax.types`](../api/types.md#evosax.types) to understand the full schema used by strategies.
+For advanced instrumentation, inspect the dataclasses defined in [`evosax.types`](../api/types.md#evosax.types.State) to understand the full schema used by strategies.

@@ -4,9 +4,17 @@ import jax
 import jax.numpy as jnp
 from flax import struct
 
-from evosax.algorithms.distribution_based.xnes import get_weights as get_nes_weights
-
 from ...fitness_shaping import centered_rank
+
+
+def _xnes_weights(population_size: int) -> jax.Array:
+    """Replica of xNES weight computation to avoid circular imports."""
+    weights = jnp.clip(
+        jnp.log(population_size / 2 + 1) - jnp.log(jnp.arange(1, population_size + 1)),
+        a_min=0.0,
+    )
+    weights = weights / jnp.sum(weights)
+    return weights - 1 / population_size
 
 
 class TraceConstructor:
@@ -85,7 +93,7 @@ class DistributionFeaturizer:
         state: DistributionFeaturesState,
     ) -> jax.Array:
         ranks = fitness.argsort()
-        weights = get_nes_weights(fitness.shape[0])
+        weights = _xnes_weights(fitness.shape[0])
         noise = (x - mean) / std
         sorted_noise = noise[ranks]
         grad_mean = jnp.dot(weights, sorted_noise).reshape(-1, 1)

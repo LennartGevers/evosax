@@ -4,8 +4,6 @@ import jax
 import jax.numpy as jnp
 from flax import struct
 
-from evosax.algorithms.base import update_best_solution_and_fitness
-
 from ...fitness_shaping import normalize
 
 
@@ -65,15 +63,13 @@ class SolutionFeaturizer:
             norm_diff_mean_sq = jnp.expand_dims(jnp.square(diff_mean / std), axis=-1)
             sol_out = jnp.concatenate([sol_out, norm_diff_mean_sq], axis=-1)
 
-        if self.maximize:
-            best_solution, best_fitness = update_best_solution_and_fitness(
-                population, -fitness, state.best_solution, -state.best_fitness
-            )
-            best_fitness = -best_fitness
-        else:
-            best_solution, best_fitness = update_best_solution_and_fitness(
-                population, fitness, state.best_solution, state.best_fitness
-            )
+        best_solution, best_fitness = _update_best_solution_and_fitness(
+            population,
+            fitness,
+            state.best_solution,
+            state.best_fitness,
+            maximize=self.maximize,
+        )
         if self.diff_best:
             diff_best = jnp.expand_dims(population - best_solution, axis=-1)
             sol_out = jnp.concatenate([sol_out, diff_best], axis=-1)
@@ -109,3 +105,28 @@ class SolutionFeaturizer:
             self.num_dims,
             self.num_features,
         )
+
+
+def _update_best_solution_and_fitness(
+    population: jax.Array,
+    fitness: jax.Array,
+    best_solution_so_far: jax.Array,
+    best_fitness_so_far: float,
+    *,
+    maximize: bool = False,
+) -> tuple[jax.Array, float]:
+    """Replica of algorithm helper to avoid circular imports."""
+    fitness_min = jax.lax.select(maximize, -fitness, fitness)
+    best_fit_min = jax.lax.select(maximize, -best_fitness_so_far, best_fitness_so_far)
+
+    idx = jnp.argmin(fitness_min)
+    best_solution_in_population = population[idx]
+    best_fitness_in_population = fitness_min[idx]
+
+    condition = best_fitness_in_population < best_fit_min
+    new_solution = jnp.where(
+        condition[..., None], best_solution_in_population, best_solution_so_far
+    )
+    new_fitness = jax.lax.select(condition, best_fitness_in_population, best_fit_min)
+    new_fitness = jax.lax.select(maximize, -new_fitness, new_fitness)
+    return new_solution, new_fitness

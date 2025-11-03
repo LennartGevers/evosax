@@ -2,12 +2,7 @@ import functools
 
 import jax
 import jax.numpy as jnp
-from flax import struct
-
-from evosax.algorithms.distribution_based.discovered_es import (
-    get_weights as get_des_weights,
-)
-from evosax.algorithms.distribution_based.xnes import get_weights as get_nes_weights
+from flax import linen as nn, struct
 
 from ...fitness_shaping import (
     centered_rank,
@@ -15,6 +10,21 @@ from ...fitness_shaping import (
     normalize,
     standardize,
 )
+
+
+def _xnes_weights(population_size: int) -> jax.Array:
+    weights = jnp.clip(
+        jnp.log(population_size / 2 + 1) - jnp.log(jnp.arange(1, population_size + 1)),
+        a_min=0.0,
+    )
+    weights = weights / jnp.sum(weights)
+    return weights - 1 / population_size
+
+
+def _des_weights(population_size: int, temperature: float = 12.5) -> jax.Array:
+    centered_ranks = jnp.arange(population_size) / (population_size - 1) - 0.5
+    sigmoid = nn.sigmoid(temperature * centered_ranks)
+    return nn.softmax(-20 * sigmoid)
 
 
 @struct.dataclass
@@ -73,13 +83,13 @@ class FitnessFeaturizer:
             fit_out = jnp.concatenate([fit_out, fit_norm], axis=1)
 
         if self.snes_weights:
-            fit_snes = get_nes_weights(fitness.shape[0])[fitness.argsort()].reshape(
+            fit_snes = _xnes_weights(fitness.shape[0])[fitness.argsort()].reshape(
                 -1, 1
             )
             fit_out = jnp.concatenate([fit_out, fit_snes], axis=1)
 
         if self.des_weights:
-            fit_des = get_des_weights(fitness.shape[0])[fitness.argsort()].reshape(
+            fit_des = _des_weights(fitness.shape[0])[fitness.argsort()].reshape(
                 -1, 1
             )
             fit_out = jnp.concatenate([fit_out, fit_des], axis=1)

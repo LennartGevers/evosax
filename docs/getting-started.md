@@ -52,8 +52,8 @@ Strategies expose a `best_solution` and `best_fitness` via the returned state to
 
 `evosax` ships with both distribution-based and population-based algorithms:
 
-- **Distribution-based** methods such as [`CMA_ES`](algorithms/distribution.md#covariance-matrix-adaptation) and [`Open_ES`](api/algorithms.md#evosax.algorithms.Open_ES) maintain and adapt a sampling distribution.
-- **Population-based** methods such as [`SimpleGA`](algorithms/population.md#genetic-algorithms) and [`DiffusionEvolution`](api/algorithms.md#evosax.algorithms.DiffusionEvolution) evolve a population of explicit candidate solutions.
+- **Distribution-based** methods such as [`CMA_ES`](algorithms/distribution.md#covariance-matrix-adaptation) and [`Open_ES`](api/algorithms.md#evosax.algorithms.distribution_based.open_es.Open_ES) maintain and adapt a sampling distribution.
+- **Population-based** methods such as [`SimpleGA`](algorithms/population.md#genetic-algorithms) and [`DiffusionEvolution`](api/algorithms.md#evosax.algorithms.population_based.diffusion_evolution.DiffusionEvolution) evolve a population of explicit candidate solutions.
 
 Refer to the [algorithms overview](algorithms/distribution.md) for a curated list of strategies and example notebooks.
 
