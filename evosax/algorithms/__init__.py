@@ -15,6 +15,8 @@ organized into two main categories:
 
 # ruff: noqa: F401
 
+from .base import EvolutionaryAlgorithm
+
 # Distribution-based algorithms
 from .distribution_based import distribution_based_algorithms
 from .distribution_based.ars import ARS
@@ -44,6 +46,8 @@ from .distribution_based.simulated_annealing import SimulatedAnnealing
 from .distribution_based.snes import SNES
 from .distribution_based.sv.sv_cma_es import SV_CMA_ES
 from .distribution_based.sv.sv_open_es import SV_Open_ES
+from .distribution_based.sv.base import SV_ES
+from .distribution_based.base import DistributionBasedAlgorithm
 from .distribution_based.xnes import xNES
 
 # Population-based algorithms
@@ -56,8 +60,14 @@ from .population_based.mr15_ga import MR15_GA
 from .population_based.pso import PSO
 from .population_based.samr_ga import SAMR_GA
 from .population_based.simple_ga import SimpleGA
+from .population_based.base import PopulationBasedAlgorithm
 
 # Combine algorithms from both categories
 algorithms = distribution_based_algorithms | population_based_algorithms
 
-__all__ = list(algorithms.keys())
+__all__ = list(algorithms.keys()) + [
+    "EvolutionaryAlgorithm",
+    "DistributionBasedAlgorithm",
+    "PopulationBasedAlgorithm",
+    "SV_ES",
+]

@@ -13,8 +13,9 @@ from evosax.core.fitness_shaping import weights_fitness_shaping_fn
 from evosax.core.kernel import kernel_rbf
 from evosax.types import Fitness, Population, Solution
 
+from .. import base as distribution_base
 from ..cma_es import CMA_ES, Params as BaseParams, State as BaseState
-from .base import SV_ES, metrics_fn
+from .base import SV_ES
 
 
 @struct.dataclass
@@ -38,7 +39,7 @@ class SV_CMA_ES(SV_ES, CMA_ES):
         solution: Solution,
         kernel: Callable = kernel_rbf,
         fitness_shaping_fn: Callable = weights_fitness_shaping_fn,
-        metrics_fn: Callable = metrics_fn,
+        metrics_fn: Callable = distribution_base.metrics_fn,
     ):
         """Initialize SV-CMA-ES."""
         SV_ES.__init__(

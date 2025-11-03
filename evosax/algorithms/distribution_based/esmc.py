@@ -13,27 +13,22 @@ from flax import struct
 from evosax.core.fitness_shaping import identity_fitness_shaping_fn
 from evosax.types import Fitness, Population, Solution
 
-from .base import (
-    DistributionBasedAlgorithm,
-    Params as BaseParams,
-    State as BaseState,
-    metrics_fn,
-)
+from . import base as distribution_base
 
 
 @struct.dataclass
-class State(BaseState):
+class State(distribution_base.State):
     mean: jax.Array
     std: jax.Array
     opt_state: optax.OptState
 
 
 @struct.dataclass
-class Params(BaseParams):
+class Params(distribution_base.Params):
     pass
 
 
-class ESMC(DistributionBasedAlgorithm):
+class ESMC(distribution_base.DistributionBasedAlgorithm):
     """Evolution Strategy with Meta-loss Clipping (ESMC)."""
 
     def __init__(
@@ -49,7 +44,7 @@ class ESMC(DistributionBasedAlgorithm):
         ),
         std_schedule: Callable = optax.constant_schedule(1.0),
         fitness_shaping_fn: Callable = identity_fitness_shaping_fn,
-        metrics_fn: Callable = metrics_fn,
+        metrics_fn: Callable = distribution_base.metrics_fn,
     ):
         """Initialize ESMC."""
         assert population_size >= 4, "Population size must be >= 4"

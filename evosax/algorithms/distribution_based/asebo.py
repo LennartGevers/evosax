@@ -1,10 +1,18 @@
-"""Adaptive ES-Active Subspaces for Blackbox Optimization (Choromanski et al., 2019).
+"""Adaptive ES-Active Subspaces for Blackbox Optimization (ASEBO).
 
-[1] https://arxiv.org/abs/1903.04268
+The implementation closely follows Choromanski et al. (2019)
+``https://arxiv.org/abs/1903.04268`` while adapting the algorithm to the
+batch-oriented interface used throughout :mod:`evosax`.  Notable
+differences from the original presentation include:
 
-Note that there are a couple of adaptations:
-1. We always sample a fixed population size per generation
-2. We keep a fixed archive of gradients to estimate the subspace
+* Always sampling a fixed population size per generation to simplify JIT
+  compilation and batching.
+* Maintaining a fixed-size FIFO archive of gradient estimates when
+  constructing the low-dimensional subspace.
+
+These docstrings intentionally detail the behaviour so that the MkDocs API
+reference generated via mkdocstrings communicates the assumptions and
+operational nuances to practitioners exploring the library.
 """
 
 from collections.abc import Callable
@@ -27,6 +35,33 @@ from .base import (
 
 @struct.dataclass
 class State(BaseState):
+    """Additional state tracked by :class:`ASEBO`.
+
+    Attributes
+    ----------
+    mean:
+        Flattened mean of the search distribution (inherited from
+        :class:`DistributionBasedAlgorithm`).
+    std:
+        Standard deviation used when sampling the isotropic exploration
+        component.
+    opt_state:
+        Internal optimiser state returned by the Optax transformation that
+        updates the mean.
+    grad_subspace:
+        FIFO buffer of recent gradient estimates used to construct the
+        active subspace via SVD.
+    alpha:
+        Mixing coefficient that balances the isotropic and subspace-based
+        covariance components.
+    UUT:
+        Covariance contribution formed by projecting onto the active
+        subspace.
+    UUT_ort:
+        Covariance contribution formed by projecting onto the orthogonal
+        complement of the active subspace.
+    """
+
     mean: jax.Array
     std: float
     opt_state: optax.OptState
@@ -38,11 +73,27 @@ class State(BaseState):
 
 @struct.dataclass
 class Params(BaseParams):
+    """Hyper-parameters specific to :class:`ASEBO`.
+
+    Attributes
+    ----------
+    grad_decay:
+        Exponential decay used when maintaining the FIFO gradient archive.
+        Values close to ``1.0`` retain gradients for longer, whereas lower
+        values make the subspace react faster to new information.
+    """
+
     grad_decay: float
 
 
 class ASEBO(DistributionBasedAlgorithm):
-    """Adaptive ES-Active Subspaces for Blackbox Optimization (ASEBO)."""
+    """Distribution-based algorithm that adapts an active subspace online.
+
+    ASEBO balances exploration between the global search space and a
+    low-dimensional active subspace estimated from historical gradients.
+    This yields gradient-efficient search directions while retaining enough
+    isotropic exploration to escape poor subspaces.
+    """
 
     def __init__(
         self,
@@ -54,7 +105,30 @@ class ASEBO(DistributionBasedAlgorithm):
         fitness_shaping_fn: Callable = identity_fitness_shaping_fn,
         metrics_fn: Callable = metrics_fn,
     ):
-        """Initialize ASEBO."""
+        """Construct an ASEBO optimiser instance.
+
+        Parameters
+        ----------
+        population_size:
+            Number of individuals sampled each generation.  Must be even to
+            support antithetic sampling.
+        solution:
+            Representative solution PyTree whose structure defines the
+            optimisation space.
+        subspace_dims:
+            Number of principal directions retained when constructing the
+            active subspace.  Defaults to ``1``.
+        optimizer:
+            Optax gradient transformation responsible for updating the mean.
+        std_schedule:
+            Callable returning the standard deviation used for sampling at a
+            given generation counter.
+        fitness_shaping_fn:
+            Callable that reshapes raw fitness values prior to gradient
+            estimation.  Uses :func:`identity_fitness_shaping_fn` by default.
+        metrics_fn:
+            Callable producing diagnostic metrics after each ``tell`` step.
+        """
         assert population_size % 2 == 0, "Population size must be even."
         super().__init__(population_size, solution, fitness_shaping_fn, metrics_fn)
 
@@ -71,9 +145,11 @@ class ASEBO(DistributionBasedAlgorithm):
 
     @property
     def _default_params(self) -> Params:
+        """Return algorithm defaults used when no parameters are supplied."""
         return Params(grad_decay=0.99)
 
     def _init(self, key: jax.Array, params: Params) -> State:
+        """Initialise the ASEBO state prior to the first optimisation step."""
         grad_subspace = jnp.zeros((self.subspace_dims, self.num_dims))
 
         state = State(
@@ -96,6 +172,13 @@ class ASEBO(DistributionBasedAlgorithm):
         state: State,
         params: Params,
     ) -> tuple[Population, State]:
+        """Sample a new population of candidates from the current search distribution.
+
+        The method implements antithetic sampling around the current mean
+        while mixing isotropic noise with directions derived from the active
+        subspace.  It also updates cached covariance terms used during the
+        subsequent :meth:`_tell` call.
+        """
         # Antithetic sampling of noise
         X = state.grad_subspace
         X -= jnp.mean(X, axis=0)
@@ -141,6 +224,13 @@ class ASEBO(DistributionBasedAlgorithm):
         state: State,
         params: Params,
     ) -> State:
+        """Update the internal state using evaluated fitness values.
+
+        The fitness differences between antithetic pairs are converted into
+        a gradient estimate that updates the mean via the configured Optax
+        optimiser.  The gradient archive and subspace mixing coefficient are
+        refreshed to prepare for the next call to :meth:`_ask`.
+        """
         # Compute grad
         fitness_plus = fitness[: self.population_size // 2]
         fitness_minus = fitness[self.population_size // 2 :]

@@ -14,8 +14,9 @@ from evosax.core.fitness_shaping import centered_rank_fitness_shaping_fn
 from evosax.core.kernel import kernel_rbf
 from evosax.types import Fitness, Population, Solution
 
+from .. import base as distribution_base
 from ..open_es import Open_ES, Params as BaseParams, State as BaseState
-from .base import SV_ES, metrics_fn
+from .base import SV_ES
 
 
 @struct.dataclass
@@ -42,7 +43,7 @@ class SV_Open_ES(SV_ES, Open_ES):
         optimizer: optax.GradientTransformation = optax.sgd(learning_rate=1e-3),
         std_schedule: Callable = optax.constant_schedule(1.0),
         fitness_shaping_fn: Callable = centered_rank_fitness_shaping_fn,
-        metrics_fn: Callable = metrics_fn,
+        metrics_fn: Callable = distribution_base.metrics_fn,
     ):
         """Initialize SV-OpenAI-ES."""
         SV_ES.__init__(

@@ -1,5 +1,7 @@
 """Base module for Stein Variational Evolution Strategies."""
 
+from __future__ import annotations
+
 from collections.abc import Callable
 from functools import partial
 
@@ -9,16 +11,10 @@ from evosax.core.kernel import kernel_rbf
 from evosax.types import Fitness, Metrics, Population, Solution
 
 from ...base import update_best_solution_and_fitness
-from ..base import (
-    DistributionBasedAlgorithm,
-    Params,
-    State,
-    identity_fitness_shaping_fn,
-    metrics_fn,
-)
+from .. import base as distribution_base
 
 
-class SV_ES(DistributionBasedAlgorithm):
+class SV_ES(distribution_base.DistributionBasedAlgorithm):
     """Base class for Stein Variational Evolution Strategy."""
 
     def __init__(
@@ -27,11 +23,11 @@ class SV_ES(DistributionBasedAlgorithm):
         num_populations: int,
         solution: Solution,
         kernel: Callable = kernel_rbf,
-        fitness_shaping_fn: Callable = identity_fitness_shaping_fn,
-        metrics_fn: Callable = metrics_fn,
+        fitness_shaping_fn: Callable = distribution_base.identity_fitness_shaping_fn,
+        metrics_fn: Callable = distribution_base.metrics_fn,
     ):
         """Initialize base class for Stein Variational Evolution Strategy."""
-        DistributionBasedAlgorithm.__init__(
+        distribution_base.DistributionBasedAlgorithm.__init__(
             self, population_size, solution, fitness_shaping_fn, metrics_fn
         )
 
@@ -45,8 +41,8 @@ class SV_ES(DistributionBasedAlgorithm):
         self,
         key: jax.Array,
         means: Solution,
-        params: Params,
-    ) -> State:
+        params: distribution_base.Params,
+    ) -> distribution_base.State:
         """Initialize distribution-based algorithm."""
         state = self._init(key, params)
         state = state.replace(mean=jax.vmap(self._ravel_solution)(means))
@@ -56,9 +52,9 @@ class SV_ES(DistributionBasedAlgorithm):
     def ask(
         self,
         key: jax.Array,
-        state: State,
-        params: Params,
-    ) -> tuple[Population, State]:
+        state: distribution_base.State,
+        params: distribution_base.Params,
+    ) -> tuple[Population, distribution_base.State]:
         """Ask evolutionary algorithm for new candidate solutions to evaluate."""
         # Generate population
         population, state = self._ask(key, state, params)
@@ -77,9 +73,9 @@ class SV_ES(DistributionBasedAlgorithm):
         key: jax.Array,
         population: Population,
         fitness: Fitness,
-        state: State,
-        params: Params,
-    ) -> tuple[State, Metrics]:
+        state: distribution_base.State,
+        params: distribution_base.Params,
+    ) -> tuple[distribution_base.State, Metrics]:
         """Tell evolutionary algorithm fitness for state update."""
         # Ravel population
         population = jax.vmap(jax.vmap(self._ravel_solution))(population)
@@ -114,7 +110,9 @@ class SV_ES(DistributionBasedAlgorithm):
 
         return state, metrics
 
-    def _init(self, key: jax.Array, params: Params) -> State:
+    def _init(
+        self, key: jax.Array, params: distribution_base.Params
+    ) -> distribution_base.State:
         keys = jax.random.split(key, num=self.num_populations)
         state = jax.vmap(super()._init, in_axes=(0, None))(keys, params)
         return state
@@ -122,13 +120,13 @@ class SV_ES(DistributionBasedAlgorithm):
     def _ask(
         self,
         key: jax.Array,
-        state: State,
-        params: Params,
-    ) -> tuple[Population, State]:
+        state: distribution_base.State,
+        params: distribution_base.Params,
+    ) -> tuple[Population, distribution_base.State]:
         keys = jax.random.split(key, num=self.num_populations)
         return jax.vmap(super()._ask, in_axes=(0, 0, None))(keys, state, params)
 
-    def get_mean(self, state: State) -> Solution:
+    def get_mean(self, state: distribution_base.State) -> Solution:
         """Return unravelled mean."""
         mean = jax.vmap(self._unravel_solution)(state.mean)
         return mean

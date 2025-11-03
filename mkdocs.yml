@@ -52,8 +52,13 @@ plugins:
     - hippogriffe:
         extra_public_objects:
             - numpy.ndarray
+            - jax.Array
             - jax.tree_util.Partial
             - jax.ShapeDtypeStruct
+            - optax._src.base.GradientTransformation
+            - flax.linen.module.Module
+            - flax.core.scope.Scope
+            - flax.linen.module._Sentinel
             - lineax.AbstractLinearSolver
             - lineax.AutoLinearSolver
             - optimistix.AbstractRootFinder
@@ -76,4 +81,16 @@ plugins:
                     show_symbol_type_toc: true
 
 nav:
-    - 'index.md'
+    - Home: index.md
+    - Getting Started: getting-started.md
+    - Guides:
+        - Ask-Eval-Tell Workflow: guides/ask-eval-tell.md
+    - Algorithms:
+        - Distribution-based Strategies: algorithms/distribution.md
+        - Population-based Strategies: algorithms/population.md
+    - API Reference:
+        - Algorithms: api/algorithms.md
+        - Core Utilities: api/core.md
+        - Learned Evolution: api/learned_evolution.md
+        - Problem Suites: api/problems.md
+        - Types: api/types.md
