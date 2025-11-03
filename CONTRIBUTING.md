@@ -71,6 +71,17 @@ git push --set-upstream origin name-of-change
 
 9. Create a pull request from the `evosax` repository and send it for review.
 
+### If you're making changes to the documentation
+
+Make your changes. You can then build the documentation by doing
+
+```bash
+pip install -e '.[docs]'
+mkdocs serve
+```
+
+You can then see your local copy of the documentation by navigating to `localhost:8000` in a web browser.
+
 ## Report a bug or suggest a new feature using GitHub issues
 
 Go to https://github.com/RobertTLange/evosax/issues and click on "New issue".
