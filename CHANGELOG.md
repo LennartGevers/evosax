@@ -181,7 +181,7 @@ Big thanks to Cornelius Braun (@cornelius-braun
 - Adds string `fitness_trafo` option to `FitnessShaper` (e.g. `z_score`, etc.).
 - Adds `sigma_meta` as kwarg to `SAMR_GA` and `GESMR_GA`.
 - Adds `sigma_init` as kwarg to `LGA` and `LES`.
-- Adds Noise-Reuse ES - `NoiseReuseES` - ([Li et al., 2023](https://arxiv.org/pdf/2304.12180.pdf)) as a generalization of PES. 
+- Adds Noise-Reuse ES - `NoiseReuseES` - ([Li et al., 2023](https://arxiv.org/pdf/2304.12180.pdf)) as a generalization of PES.
 - Fix LES evolution path calculation and re-ran meta-training for checkpoint.
 
 ### Fixed
@@ -229,7 +229,7 @@ Big thanks to Cornelius Braun (@cornelius-braun
 - Adds exponential decay of mean/weight regularization to ES that update mean (FD-ES and CMA variants). Simply provide `mean_decay` != 0.0 argument at strategy instantiation to strategy. Note that covariance estimates may be a bit off, but this circumvents constant increase of mean norm due to stochastic process nature.
 
 - Adds experimental distributed ES, which sample directly on all devices (no longer only on host). Furthermore, we use `pmean`-like all reduce ops to construct z-scored fitness scores and gradient accumulations to update the mean estimate. So far only FD-gradient-based ES are supported. Major benefits: Scale with the number of devives and allow for larger populations/number of dimensions.
-    - Supported distributed ES: 
+    - Supported distributed ES:
         - `DistributedOpenES`
     - Import via: `from evosax.experimental.distributed import DistributedOpenES`
 
@@ -374,7 +374,7 @@ class State:
     - Full-iAMaLGaM (`iAMaLGaM_Full`, following Bosman et al., 2013)
     - MA-ES (`MA_ES`, following Bayer & Sendhoff, 2017)
     - LM-MA-ES (`LM_MA_ES`, following Loshchilov et al., 2017)
-- Restart wrappers: 
+- Restart wrappers:
     - Base restart class (`RestartWrapper`).
     - Simple reinit restart strategy (`Simple_Restarter`).
     - BIPOP strategy with interleaved small/large populations (`BIPOP_Restarter`).
